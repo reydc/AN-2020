@@ -1,6 +1,6 @@
 from importlib  import reload
 from matplotlib import pyplot
-from numpy      import linspace, loadtxt, isnan, array
+from numpy      import linspace, loadtxt, isnan
 from scipy.interpolate import CubicSpline
 
 """ Ejercicio 1 """
@@ -216,7 +216,7 @@ def lab3ej4_alt():
 
 """ Ejercicio 5 """
 def lab3ej5():
-    data = loadtxt(fname="datos_aeroCBA.dat", encoding="ascii")
+    data = loadtxt(fname="Datos_Laboratorio_3/datos_aeroCBA.dat", encoding="ascii")
     (n, _) = data.shape
     """ Datos son anuales
         Años
