@@ -11,7 +11,7 @@ def verificar_propiedades_basicas():
 
 """ Ejercicio 1 """
 
-def ejercicio_1(x,y,z):
+def ej1(x,y,z):
     try:
         print("x/y + z = {}".format(x/y + z))
     except Exception as e:
@@ -35,7 +35,7 @@ def ejercicio_1(x,y,z):
 
 """ Ejercicio 2 """
 
-def ejercicio_2():
+def ej2():
     print("Epsilon-máquina es 2^(-52):")
     print("Recordemos que si eps es el épsilon-máquina, entonces es el número más pequeño tal que 1 + eps != 1")
     print("1 + 2**(-52) = {}".format(1 + 2**(-52)))
@@ -43,7 +43,7 @@ def ejercicio_2():
 
 """ Ejercicio 3 """
 
-def ejercicio_3(print_all = True):
+def ej3(print_all = True):
     a = 2.
     b = 2.
     if print_all:
@@ -67,7 +67,7 @@ def ejercicio_3(print_all = True):
         print("b = {}".format(b))
         print("El próximo causa Underflow!")
 
-def verificar_ejercicio_3():
+def verificar_ej3():
     """ Para ver que de lo mismo, con lo que envío el profesor """
     a = 2.
     while a * 2. !=float('inf'):
@@ -83,7 +83,7 @@ def verificar_ejercicio_3():
 
 """ Ejercicio 4 """
 
-def ejercicio_4_a(finite = False, iters = 10):
+def ej4a(finite = False, iters = 10):
     """ El comportamiento por defecto es una iteración infinita, usar CTRL+c para detener """
     x = 0
     i = 0
@@ -97,7 +97,7 @@ def ejercicio_4_a(finite = False, iters = 10):
             x += 0.1
             print(x)
     
-def ejercicio_4_b():
+def ej4b():
     """ El comportamiento por defecto es una iteración finita """
     x = 0
     while x != 10:
@@ -113,10 +113,10 @@ def factorial_rec(n):
         res *= i
     return res
 
-def ejercicio_5():
+def ej5():
     return factorial_rec(6)
 
-def verificar_ejercicio_5(n):
+def verificar_ej5(n):
     """ Para chequear que todo anda bien """
     return factorial(n)
 
@@ -132,7 +132,7 @@ Debe dar "Iguales"
 Debe dar "Iguales", pero con tol_rel = 10e-17 debe dar "Distintos"
 Después tratar on tol_rel = 0.0, tol_abs = 10e-17
 """
-def ejercicio_6(tol_rel = 1e-09, tol_abs = 0.0):
+def ej6(tol_rel = 1e-09, tol_abs = 0.0):
     a = input("Dar un real: ")
     b = input("Dar otro real: ")
     """ Imprimir si son iguales o no

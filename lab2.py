@@ -62,7 +62,7 @@ fun_lab2ej2a = lambda x : tan(x) - 2*x
 
 fun_lab2ej2b = lambda x : x**2 - 3
 
-def fun_lab2ej2():
+def ej2():
     
     """ Intervalos para fun_lab2ej2a """
     ia1 = [0.8 , 1.4]
@@ -189,10 +189,10 @@ def rnewton(fun, x0, err, mit):
     función "f(x) = x^3 - a".
 
     Probar haciendo en la consola:
-    lab2.fun_lab2ej4(3,3,30)
+    lab2.ej4(3,3,30)
 """
 
-def fun_lab2ej4(a, x0, mit):
+def ej4(a, x0, mit):
     if a > 0:
         print("Entrada: a = {}, x0 = {}, mit = {}\n".format(a, x0, mit))
         hx, _ = rnewton(hacer_fun("x**3-{}".format(a)), x0, 1e-6, mit)
@@ -292,9 +292,11 @@ def investigar_puntos_fijos(fun, I, puntos_intervalo, err, mit, graficar = False
     absoluto de la derivada de la función en el punto es menor a 1) y
     x == 2 es un punto fijo repelente
 """
-def fun_lab2ej6():
-    fun = lambda x : 2**(x-1)
-    investigar_puntos_fijos(fun, [-10,10], 10, 1e-5, 100, True)
+def fun_lab2ej6(x):
+    return 2**(x-1)
+
+def ej6():
+    investigar_puntos_fijos(fun_lab2ej6, [-10,10], 10, 1e-5, 100, True)
 
 """ Ejercicio 7 """
 """ Se desea conocer la gráfica de una función u tal que u(x) = y,
@@ -349,7 +351,7 @@ def ver_fi_ej7(y_a, y_b, num_puntos_y, x_a, x_b, num_puntos_x):
     graficar_fi_x([y_a,y_b], num_puntos_y, [x_a,x_b], num_puntos_x, True)
 
 
-def fun_lab2ej7(err_bisec = 1e-9, it_bisec = 100, err_newton = 1e-9, it_newton = 100, err_ipf = 1e-9, it_ipf = 100):
+def ej7(err_bisec = 1e-9, it_bisec = 100, err_newton = 1e-9, it_newton = 100, err_ipf = 1e-9, it_ipf = 100):
     Iy = [-10 , 10]
     Ix = [0 , 1.5]
     puntos_x = linspace(*Ix, 30)

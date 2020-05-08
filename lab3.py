@@ -107,7 +107,7 @@ def inewton_iter(x, y, z):
     return resultados
 
 """ Ejercicio 3 """
-def lab3ej3():
+def ej3():
     """ Puntos para evaluar con nuestro polinomio interpolador """
     z = [24/25 + j/25 for j in range(1, 102)]
     
@@ -168,11 +168,11 @@ def fenomeno_runge(n):
 
     pyplot.show()
 
-def lab3ej4():
+def ej4():
     for n in range(1, 16):
         fenomeno_runge(n)
 
-def lab3ej4_alt():
+def ej4_alt():
     """ Puntos para evaluar con nuestro polinomio interpolador """
     z = linspace(-1, 1, 200)
 
@@ -215,7 +215,7 @@ def lab3ej4_alt():
     pyplot.show()
 
 """ Ejercicio 5 """
-def lab3ej5():
+def ej5():
     data = loadtxt(fname="Datos_Laboratorio_3/datos_aeroCBA.dat", encoding="ascii")
     (n, _) = data.shape
     """ Datos son anuales
