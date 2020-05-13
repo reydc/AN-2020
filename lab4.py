@@ -119,9 +119,6 @@ def ej2b():
 
     pyplot.show()
 
-""" Ejercicio 3: Las aproximaciones son horribles en este caso,
-                 porque se usa un modelo lineal
-"""
 def ej3a():
     data = loadtxt(fname="Datos_Laboratorio_4/datos3a.dat", encoding="ascii")
     
@@ -184,7 +181,6 @@ def ej3b():
     
     return A, B
 
-""" Ejercicio 4: Ocurre lo mismo que ocurre en el 3 """
 def ej4():
     data = loadtxt("Datos_Laboratorio_4/covid_italia.csv", delimiter=",", encoding="ascii")
     n, _ = data.shape
