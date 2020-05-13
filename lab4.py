@@ -133,8 +133,8 @@ def ej3a():
     l_y = [ log(y) for y in data[1]]
     
     c = polyfit(l_x, l_y, deg=1)
-    A = c[0]
-    C = exp(c[1])
+    A = c[1]
+    C = exp(c[0])
     print("Ejercicio 3.a: y = C*(x**A)")
     print("C = %s"%C)
     print("A = %s"%A)
@@ -154,11 +154,14 @@ def ej3b():
     data = loadtxt(fname="Datos_Laboratorio_4/datos3b.dat", encoding="ascii")
     
     """ Se nos da y = x / (A*x + B), de donde tenemos
-        A*x + B = x/y
-        Entonces debemos ajustar y' = x/y x' = x
+        y = 1 / (A + B * (1/x))
+        A + B * (1/x) = 1/y
+        Entonces debemos ajustar
+        y' = 1/y
+        x' = 1/x
     """
-    x = data[0]
-    y = [ data[0][i] / data[1][i] for i in range(len(data[0]))]
+    x = 1 / data[0,1:]
+    y = 1 / data[1,1:]
     c = polyfit(x, y, deg=1)
     A = c[0]
     B = c[1]
@@ -166,12 +169,12 @@ def ej3b():
     print("B = %s"%B)
     print("A = %s"%A)
     
-    I = linspace(min(data[0]), max(data[0]), 1000)
+    I = linspace(min(data[0,1:]), max(data[0,1:]), 1000)
 
     pyplot.plot(data[0], data[1], "*r", label="Datos")
     pyplot.plot(I, I/(A * I + B), "g", label="$\\tilde{y}(x) = \\frac{x}{(%s)x + (%s)}$"%(A,B))
-    pyplot.plot(x, y, "*", color="orange", label="Datos de ajuste ($x/y$)")
-    pyplot.plot(x, polyval(x, c), "b", label="$x/y = (%s)x + (%s)$"%(A,B))
+    pyplot.plot(x, y, "*", color="orange", label="Datos de ajuste ($\\frac{1}{y}$)")
+    pyplot.plot(x, polyval(x, c), "b", label="$\\frac{1}{y} = (%s)\\frac{1}{x} + (%s)$"%(B,A))
     pyplot.title("Ejercicio 3.a")
     pyplot.legend(loc="upper left")
     pyplot.axhline(0, color="black")
@@ -192,8 +195,8 @@ def ej4():
     y = [ data[i][1] for i in range(n)]
     l_y = log(y)
     c = polyfit(x, l_y, deg=1)
-    a = exp(c[1])
-    b = c[0]
+    a = exp(c[0])
+    b = c[1]
     print("Ejercicio 4: y = a*(e**(b*x))")
     print("a = %s"%a)
     print("b = %s"%b)
