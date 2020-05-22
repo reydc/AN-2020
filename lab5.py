@@ -335,8 +335,8 @@ def pendulo(l, alfa):
         return None
     alfa = (pi/180) * alfa
     sub_T = lambda theta : 1 / (1 - sin(alfa/2)**2 * sin(theta)**2)**(1/2)
-    """ c = (4 / g) * (l)**(1/2), [g] = m/s**2, [l] = m """
-    c = (4/9.8) * l**(1/2)
+    """ c = 4 * (l/g)**(1/2), [g] = m/s**2, [l] = m """
+    c = 4 * (l / 9.8)**(1/2)
     """ Se devuelve una magnitud del período """
     return c * intenumcomp(sub_T, 0, pi/2, 10, "simpson")
 
