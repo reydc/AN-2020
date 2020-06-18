@@ -4,6 +4,8 @@ from scipy      import integrate
 from sympy      import sympify, symbols, latex
 from numpy      import linspace, vectorize, sin, cos, tan, exp, log, pi, ceil
 
+""" Ejercicio 1 """
+
 def intenumcomp(fun, a, b, N, regla):
     if b < a:
         print("[intenumcomp] Se queire especificar un intervalo [a,b], pero b < a\n")
@@ -42,6 +44,7 @@ def intenumcomp(fun, a, b, N, regla):
         print("[intenumcomp] N no es un entero\n")
         return None
 
+""" Ejercicio 2 """
 def ej2():
     val = 1 - 1 / exp(1)
     fun = lambda x: exp(-x)
@@ -70,6 +73,8 @@ def ej2():
     print("Error con la regla compuesta del Simpson, con N = 20: %s\n"%(\
         abs(val - intenumcomp(fun, 0, 1, 20, "simpson")) ))
 
+""" Ejercicio 3 """
+
 def senint(x):
     N = ceil([ 10 * v_x for v_x in x ])
     N = list(map(int, N))
@@ -97,7 +102,8 @@ def ej3():
     pyplot.axvline(0, color="black")
     pyplot.show()
 
-""" Para el próximo ejercicio queremos calcular la integral con un cierto error de
+""" Ejercicio 4
+    En este ejercicio queremos calcular la integral con un cierto error de
     tolerancia. Entonces, siendo M una cota del máximo valor posible en [a,b]
     correspondiente:
     Valor absoluto del error para Trapecio = (b-a)**3 * abs(M) / (12 * N) 
@@ -291,7 +297,9 @@ def ej4d():
     
     return val_trap, val_simp
 
-""" El próximo ejercicio es integrar usando el módulo scipy.integrate """
+""" Ejercicio 5
+    En este ejercicio es integrar usando el módulo scipy.integrate
+"""
 
 def ej5a():
     """
@@ -324,6 +332,8 @@ def ej5b():
     print("Integral por regla del Trapecio (integrate.trapz): %s\n"%trapecio)
     print("Integral por regla de Simpson (integrate.simps): %s\n"%simpson)
     return trapecio, simpson
+
+""" Ejercicio 6 """
 
 def pendulo(l, alfa):
     """ l es la longitud del péndulo

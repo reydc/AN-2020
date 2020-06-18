@@ -4,6 +4,8 @@ from numpy      import linspace, loadtxt, arcsin, cos, log, exp, pi
 from numpy.random import seed, randn
 from numpy.polynomial.polynomial import polyfit, polyval
 
+""" Ejercicio 1 """
+
 """ Devuelve los coeficientes de un ajuste lineal,
     donde obtenemos la recta y = a * x + b
 """
@@ -78,6 +80,8 @@ def ej1b():
     plots[1].axvline(0, color='black')
     
     pyplot.show()
+
+""" Ejercicio 2 """
 
 def ej2a():
     x = linspace(0, 1, 50)
@@ -180,6 +184,8 @@ def ej3b():
     pyplot.show()
     
     return A, B
+
+""" Ejercicio 4 """
 
 def ej4():
     data = loadtxt("Datos_Laboratorio_4/covid_italia.csv", delimiter=",", encoding="ascii")
