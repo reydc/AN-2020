@@ -1,6 +1,7 @@
-from importlib  import reload
-from matplotlib import pyplot
-from scipy      import optimize
+from importlib    import reload
+from mpl_toolkits import mplot3d 
+from matplotlib   import pyplot
+from scipy        import optimize
 import numpy as np
 
 """ Ejercicio 1
@@ -18,8 +19,8 @@ import numpy as np
     Veamos los siguientes puntos:
     a. ¿Cuántos Kg de cada fertilizante se debe comprar, por cada 10 m^2 de campo,
        de modo de minimizar el costo total, bajo los requerimientos?
-    Si 1 Kg de T1 cuesta 10 $, entonces 1 gr costaría 1/100 $
-    Si 1 Kg de T2 cuesta 8 $, entonces 1 gr costaría 1/125 $  
+    Si 1 Kg de T1 cuesta 10 $, entonces 1 gr costaría 1/100 $.
+    Si 1 Kg de T2 cuesta 8 $, entonces 1 gr costaría 1/125 $.
     En este caso, tengo:
 
     minimizar (1/100) * t1 + (1/125) * t2
@@ -35,8 +36,8 @@ import numpy as np
 
     b. Graficar la región factible
     c. La solución se puede encontrar con scipy.optimize
-    Para usar optimize.linprog necesitamos que el problema este planteado 
-    de la siguiente forma (A_{...} matriz y el resto vectores):
+    Para usar optimize.linprog necesitamos que el problema este planteado de la 
+    siguiente forma (A_{...} matriz y el resto vectores):
     min c.T x
     A_{ub} <= b_{ub}
     A_{eq} =  b_{eq}
@@ -110,7 +111,7 @@ def ej1():
     Para graficar:
     y = (1/24) * (2400 - 50 * x)
     y = (1/33) * (2100 - 30 * x)
-    Podemos usar las siguientes rectas para entender donde se debe llenar la región
+    Podemos usar las siguientes rectas para entender donde se debe llenar la región:
     y = (1/24) * (2300 - 50 * x)
     y = (1/33) * (2000 - 30 * x)
 """
@@ -174,7 +175,7 @@ def ej2():
     Disponibilidad de B: 10, o sea 0 <= B <= 10
 
     ¿Cuántas unidades de cada medicamento debemos crear para maximizar la curación?
-    a. Plantear el problema
+    a. Plantear el problema.
     Quiero maximizar la proporción necesaria de medicamentos: 25 * m1 + 20 * m2
     Siempre m1, m2 >= 0
     Además, lo que se use de a hierbas A y B debe ser suma de las proporciones que
@@ -187,15 +188,15 @@ def ej2():
     3 * m1 + 4 * m2 <= 25
     2 * m1 + m2     <= 10
 
-    b. Graficar
-    Uso las rectas
+    b. Graficar.
+    Uso las rectas:
     m2 = (1/4) * (25 - 3 * m1) [ recta 1 ]
     m2 = 10 - 2 * m1           [ recta 2 ]
 
-    Para orientar uso las rectas
+    Para orientar uso las rectas:
     m2 = (1/4) * (20 - 3 * m1) [ recta 1 ]
     m2 = 11 - 2 * m1           [ recta 2 ]
-    c. Resolver
+    c. Resolver.
 """
 def ej3():
     m1 = np.arange(0, 10, 0.1)
@@ -242,11 +243,52 @@ def ej3():
     pyplot.grid()
     pyplot.show()
 
-""" Ejercicio 4 """
+""" Ejercicio 4
+    ¿Cuál es la cantidad a fabricar de cada tipo de cerveza, de manera que las ventas
+    sea máxima?
+    Busco maximizar las ventas, ie, maximizar 7 * rubia + 4 * negra + 3 * baja
+    de forma que respete la disponibilidad de cada recurso.
+    Según la tabla:
+    Malta    = rubia + 2 * negra + 2 * baja <= 30
+    Levadura = 2 * rubia + negra + 2 * baja <= 45
+    Entonces tengo el problema:
+    
+    minimizar -7 * rubia - 4 * negra - 3 * baja
+    dado que
+    rubia + 2 * negra + 2 * baja <= 30
+    2 * rubia + negra + 2 * baja <= 45
+    rubia, negra, baja >= 0
+
+    Si quiero graficar esto, veo que tengo los hiperplanos:
+    rubia + 2 * negra + 2 * baja = 30
+    2 * rubia + negra + 2 * baja = 45
+    Despejo rubia:
+    rubia = 30 - 2 * negra - 2 * baja
+    rubia = (1/2) * (45 - negra - 2 * baja)
+    Y para orientar uso:
+    rubia = 20 - 2 * negra - 2 * baja
+    rubia = (1/2) * (35 - negra - 2 * baja)
+
+"""
 def ej4():
+    res = optimize.linprog(
+        c = np.array([-7, -4, -3]),
+        A_ub = np.array([
+            [1, 2, 2],
+            [2, 1, 2]
+        ]),
+        b_ub = np.array([30, 45]),
+        bounds = [(0, None), (0, None), (0, None)]
+    )
 
-    return None
-
+    print("Éxito: {}\n".format(res.success))
+    print("Iteraciones: {}\n".format(res.nit))
+    print(res.message + "\n")
+    if res.success:
+        print("Solución:")
+        print(res.x)
+        print("\n")
+        print("Valor de la función objetivo: {}\n".format(res.fun))
 
 """ Ejercicio 5 """
 def ej5():
