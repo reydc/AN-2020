@@ -188,7 +188,7 @@ def ej3b():
 """ Ejercicio 4 """
 
 def ej4():
-    data = loadtxt("Datos_Laboratorio_4/covid_italia.csv", delimiter=",", encoding="ascii")
+    data = loadtxt("./Datos_Laboratorio_4/covid_italia.csv", delimiter = ",", encoding = "ascii")
     n, _ = data.shape
     """ Sea y = a*(e**(b*x)) el módelo a ajustar. Entonces tenemos
         log(y) = log(a) + b * x, es decir y' = log(y), x' = x

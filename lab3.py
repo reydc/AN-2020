@@ -216,7 +216,7 @@ def ej4_alt():
 
 """ Ejercicio 5 """
 def ej5():
-    data = loadtxt(fname="Datos_Laboratorio_3/datos_aeroCBA.dat", encoding="ascii")
+    data = loadtxt(fname = "./Datos_Laboratorio_3/datos_aeroCBA.dat", encoding = "ascii")
     (n, _) = data.shape
     """ Datos son anuales
         Años
