@@ -419,10 +419,6 @@ def ej5():
         (0, None), (0, None), (0, None), (0, None),
         (0, None), (0, None), (0, None), (0, None)
     ]
-    
-    print(c)
-    print(A_ub)
-    print(b_ub)
 
     res = optimize.linprog(
         c = c,
@@ -438,9 +434,10 @@ def ej5():
     if res.success:
         print("Solución:")
         for i in range(4):
-            print("Horas Equipo {}: {}\n".format(i + 1,
+            print("Horas Equipo {}: {}".format(i + 1,
                 round(res.x[4 * i] + res.x[4 * i + 1] + res.x[4 * i + 2] + res.x[4 * i + 3])
             ))
+            print("M: {}, N: {}, P: {}, Q: {}\n".format(round(res.x[4 * i]), round(res.x[4 * i + 1]), round(res.x[4 * i + 2]), round(res.x[4 * i + 3])))
         print("\n")
         print("Valor de la función objetivo: {}\n".format(res.fun))
 
