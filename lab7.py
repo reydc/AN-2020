@@ -222,9 +222,10 @@ def ej3():
     print(res.message + "\n")
     if res.success:
         print("Solución:")
-        print(res.x)
+        print("Proporción M1: {}\n".format(res.x[0]))
+        print("Proporción M2: {}\n".format(res.x[1]))
         print("\n")
-        print("Valor de la función objetivo: {}\n".format(res.fun))
+        print("Valor de la función objetivo: {}\n".format(-res.fun))
         pyplot.plot(res.x[0], res.x[1], "ro", label = "Solución: ({},{})".format(res.x[0], res.x[1]))
 
     pyplot.plot(m1, m2_1, label = "$m_{2} = (1/24) (2400 - 50 m_{1})$")
@@ -286,13 +287,162 @@ def ej4():
     print(res.message + "\n")
     if res.success:
         print("Solución:")
-        print(res.x)
+        print("Venta de Rubia: {}\n".format(res.x[0]))
+        print("Venta de Negra: {}\n".format(res.x[1]))
+        print("Venta de Baja: {}\n".format(res.x[2]))
+        print("\n")
+        print("Valor de la función objetivo: {}\n".format(-res.fun))
+
+""" Ejercicio 5
+    Se quiere saber el número de horas de trabajo que deben asignarse a cada equipo
+    para que se minimice el coste total del montaje del sistema.
+    Sean x1, x2, x3, x4 las horas totales de trabajo asignadas a los equipos 1, 2, 3, 4,
+    respectivamente.
+    El problema consitría en minimizar :
+    68.3 * x1 + 69.5 * x2 + 71 * x3 + 71.2 * x4
+    Según la tabla tendriamos que:
+    x1 <= 220
+    x2 <= 300
+    x3 <= 245
+    x4 <= 190
+    Las tareas completas lleva en horas:
+    Equipo  M    N    P    Q
+    1       52   212  25   60
+    2       57   218  23   57
+    3       51   201  26   54
+    4       56   223  21   55
+    Si vemos desde la perspectiva de los equipos, tendríamos que ver 
+    cuanto de cada tarea le lleva a los equipos. Entonces introducimos las variables 
+    {m1, ..., m4}, ..., {q1, ..., q4}, que nos dan las horas que cada equipo dan a
+    las tareas M, N, P, Q. Entonces:
+    x1 = m1 + n1 + p1 + q1 <= 220
+    x2 = m2 + n2 + p2 + q2 <= 300
+    x3 = m3 + n3 + p3 + q3 <= 245
+    x4 = m4 + n4 + p4 + q4 <= 190
+    Y la función objetivo es:
+    68.3 * (m1 + n1 + p1 + q1) + 69.5 * (m2 + n2 + p2 + q2) + 
+    71   * (m3 + n3 + p3 + q3) + 71.2 * (m4 + n4 + p4 + q4)
+    Ahora bien, cada tarea debe completarse, con lo que la proporción
+    (Horas dedicadas a la tarea por el equipo i) / (Horas que lleva completar al equipo i)
+    i = 1, ..., 4. Entonces:
+    m1 * (1 / 52 ) + m2 * (1 / 57 ) + m3 * (1 / 51 ) + m4 * (1 / 56 ) >= 1
+    n1 * (1 / 212) + n2 * (1 / 218) + n3 * (1 / 201) + n4 * (1 / 223) >= 1
+    p1 * (1 / 25 ) + p2 * (1 / 23 ) + p3 * (1 / 26 ) + p4 * (1 / 21 ) >= 1
+    q1 * (1 / 60 ) + q2 * (1 / 57 ) + q3 * (1 / 54 ) + q4 * (1 / 55 ) >= 1
+    Para usar scipy.optimize.linprog:
+    m1 * (-1 / 52 ) + m2 * (-1 / 57 ) + m3 * (-1 / 51 ) + m4 * (-1 / 56 ) <= -1
+    n1 * (-1 / 212) + n2 * (-1 / 218) + n3 * (-1 / 201) + n4 * (-1 / 223) <= -1
+    p1 * (-1 / 25 ) + p2 * (-1 / 23 ) + p3 * (-1 / 26 ) + p4 * (-1 / 21 ) <= -1
+    q1 * (-1 / 60 ) + q2 * (-1 / 57 ) + q3 * (-1 / 54 ) + q4 * (-1 / 55 ) <= -1
+
+    Nos queda el problema:
+    Minimizar
+    68.3 * m1 + 68.3 * n1 + 68.3 * p1 + 68.3 * q1 + 
+    69.5 * m2 + 69.5 * n2 + 69.5 * p2 + 69.5 * q2 + 
+    71   * m3 + 71   * n3 + 71   * p3 + 71   * q3 + 
+    71.2 * m4 + 71.2 * n4 + 71.2 * p4 + 71.2 * q4
+    
+    Dado que:
+    m1 * (-1 / 52 ) + n1 * 0 + p1 * 0 + q1 * 0 +
+    m2 * (-1 / 57 ) + n2 * 0 + p2 * 0 + q2 * 0 +
+    m3 * (-1 / 51 ) + n3 * 0 + p3 * 0 + q3 * 0 +
+    m4 * (-1 / 56 ) + n4 * 0 + p4 * 0 + q4 * 0
+    <= -1
+    
+    m1 * 0 + n1 * (-1 / 212) + p1 * 0 + q1 * 0 +
+    m2 * 0 + n2 * (-1 / 218) + p2 * 0 + q2 * 0 +
+    m3 * 0 + n3 * (-1 / 201) + p3 * 0 + q3 * 0 +
+    m4 * 0 + n4 * (-1 / 223) + p4 * 0 + q4 * 0
+    <= -1
+    
+    m1 * 0 + n1 * 0 + p1 * (-1 / 25 ) + q1 * 0 + 
+    m2 * 0 + n2 * 0 + p2 * (-1 / 23 ) + q2 * 0 + 
+    m3 * 0 + n3 * 0 + p3 * (-1 / 26 ) + q3 * 0 + 
+    m4 * 0 + n4 * 0 + p4 * (-1 / 21 ) + q4 * 0 
+    <= -1
+    
+    m1 * 0 + n1 * 0 + p1 * 0 + q1 * (-1 / 60 ) +
+    m2 * 0 + n2 * 0 + p2 * 0 + q2 * (-1 / 57 ) +
+    m3 * 0 + n3 * 0 + p3 * 0 + q3 * (-1 / 54 ) +
+    m4 * 0 + n4 * 0 + p4 * 0 + q4 * (-1 / 55 )
+    <= -1
+    
+    m1 * 1 + n1 * 1 + p1 * 1 + q1 * 1 +
+    m2 * 0 + n2 * 0 + p2 * 0 + q2 * 0 +
+    m3 * 0 + n3 * 0 + p3 * 0 + q3 * 0 +
+    m4 * 0 + n4 * 0 + p4 * 0 + q4 * 0
+    <= 220
+
+    m1 * 0 + n1 * 0 + p1 * 0 + q1 * 0 +
+    m2 * 1 + n2 * 1 + p2 * 1 + q2 * 1 + 
+    m3 * 0 + n3 * 0 + p3 * 0 + q3 * 0 +
+    m4 * 0 + n4 * 0 + p4 * 0 + q4 * 0
+    <= 300
+    
+    m1 * 0 + n1 * 0 + p1 * 0 + q1 * 0 +
+    m2 * 0 + n2 * 0 + p2 * 0 + q2 * 0 +
+    m3 * 1 + n3 * 1 + p3 * 1 + q3 * 1 +
+    m4 * 0 + n4 * 0 + p4 * 0 + q4 * 0    
+    <= 245
+    m1 * 0 + n1 * 0 + p1 * 0 + q1 * 0 +
+    m2 * 0 + n2 * 0 + p2 * 0 + q2 * 0 +
+    m3 * 0 + n3 * 0 + p3 * 0 + q3 * 0 +    
+    m4 * 1 + n4 * 1 + p4 * 1 + q4 * 1
+    <= 190
+    
+    m1, ..., m4, n1, ..., n4, p1, ..., p4, q1, ..., q4 => 0
+"""
+def ej5():
+    c = np.concatenate([
+        np.repeat(68.3, 4),
+        np.repeat(69.5, 4),
+        np.repeat(71  , 4),
+        np.repeat(71.2, 4)
+    ])
+    A_ub = np.array([
+        [-1/52, 0, 0, 0, -1/57, 0, 0, 0, -1/51, 0, 0, 0, -1/56, 0, 0, 0],
+        [0, -1/212, 0, 0, 0, -1/218, 0, 0, 0, -1/201, 0, 0, 0, -1/223, 0, 0],
+        [0, 0, -1/25, 0, 0, 0, -1/23, 0, 0, 0, -1/26, 0, 0, 0, -1/21, 0],
+        [0, 0, 0, -1/60, 0, 0, 0, -1/57, 0, 0, 0, -1/54, 0, 0, 0, -1/55],
+        [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1]
+    ])
+    b_ub = np.concatenate([
+        np.repeat(-1, 4),
+        np.array([220, 300, 245, 190])
+    ])
+    bounds = [
+        (0, None), (0, None), (0, None), (0, None),
+        (0, None), (0, None), (0, None), (0, None),
+        (0, None), (0, None), (0, None), (0, None),
+        (0, None), (0, None), (0, None), (0, None)
+    ]
+    
+    print(c)
+    print(A_ub)
+    print(b_ub)
+
+    res = optimize.linprog(
+        c = c,
+        A_ub = A_ub,
+        b_ub = b_ub,
+        bounds = bounds,
+        method = "interior-point"
+    )
+
+    print("Éxito: {}\n".format(res.success))
+    print("Iteraciones: {}\n".format(res.nit))
+    print(res.message + "\n")
+    if res.success:
+        print("Solución:")
+        for i in range(4):
+            print("Horas Equipo {}: {}\n".format(i + 1,
+                round(res.x[4 * i] + res.x[4 * i + 1] + res.x[4 * i + 2] + res.x[4 * i + 3])
+            ))
         print("\n")
         print("Valor de la función objetivo: {}\n".format(res.fun))
-
-""" Ejercicio 5 """
-def ej5():
-    return None
 
 """ Ejercicio 6 """
 def ej6():
