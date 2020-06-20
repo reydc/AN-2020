@@ -95,13 +95,14 @@ def ej1():
     El problema a resolver y graficar sería:
     
     maximizar x + y
-    dado que
+    dado que:
     50 * x + 24 * y <= 2400
     30 * x + 33 * y <= 2100
     
     Equivale a:
     
     minimizar - x - y
+    dado que:
     50 * x + 24 * y <= 2400
     30 * x + 33 * y <= 2100
 
@@ -183,8 +184,9 @@ def ej2():
     A = 3 * m1 + 4 * m2
     B = 2 * m1 + m2
     Entonces queda:
+
     minimizar -25 * m1 - 20 * m2
-    dado que
+    dado que:
     3 * m1 + 4 * m2 <= 25
     2 * m1 + m2     <= 10
 
@@ -255,7 +257,7 @@ def ej3():
     Entonces tengo el problema:
     
     minimizar -7 * rubia - 4 * negra - 3 * baja
-    dado que
+    dado que:
     rubia + 2 * negra + 2 * baja <= 30
     2 * rubia + negra + 2 * baja <= 45
     rubia, negra, baja >= 0
@@ -441,6 +443,78 @@ def ej5():
         print("\n")
         print("Valor de la función objetivo: {}\n".format(res.fun))
 
-""" Ejercicio 6 """
+""" Ejercicio 6
+    Una empresa cosechadora y proveedora de maní debe llevar su producción (almacenada
+    en 100 molinos) a sus clientes (100 locales diferentes).
+    Los datos que tenemos:
+    costos.dat  -> La entrada (i, j) representa el costo de enviar la prodcucción desde
+                   el depósito i al cliente j. Debe tener dimensión (100, 100).
+    stock       -> La entrada i tiene el stock del depósito i. Tiene dimensión (100,).
+    demanda.dat -> La entrada j tiene la demanda del cliente j. Tiene dimensión (100,).
+    Se desea minimizar el costo de transportar el producto de los depósitos a los 
+    clientes, sujeto al stock. Tenemos el siguiente problema:
+    
+    minimizar Suma(i, j) Costo[i, j] @ x[i, j]
+    dado que:
+     Suma(j) x[i, j] <=  Stock[i]
+    -Suma(i) x[i, j] <= -Demanda[j]
+    x[i, j] >= 0
+
+    Tenemos, por lo tanto, 100 * 100 = 10000 variables (los x aquí).
+    La función de costo sería de la forma (poniendo todas las filas pegadas):
+    Suma(j) Costo[1, j] * x[1, j] +
+    Suma(j) Costo[2, j] * x[2, j] +
+    ...
+    Suma(j) Costo[100, j] * x[100, j]
+
+    La suma sobre los stocks se hace por fila.
+    Suma(j) x[1, j]   <= Stock[1]   -> 1 ... 1 | 0 ... 0 | ... | 0 ... 0
+    Suma(j) x[2, j]   <= Stock[2]   -> 0 ... 0 | 1 ... 1 | ... | 0 ... 0
+    ...
+    Suma(j) x[100, j] <= Stock[100] -> 0 ... 0 | 0 ... 0 | ... | 1 ... 1
+    La suma por la demanda se hace por las columnas.
+    -Suma(i) x[i, 1]   <= -Demanda[1]   -> -1  0 ...  0 | -1  0 ...  0 | ... | -1  0 ...  0
+    -Suma(i) x[i, 2]   <= -Demanda[2]   ->  0 -1 ...  0 |  0 -1 ...  0 | ... |  0 -1 ...  0
+    ...
+    -Suma(i) x[i, 100] <= -Demanda[100] ->  0  0 ... -1 |  0  0 ... -1 | ... |  0  0 ... -1
+    Tenemos un vector de restricciones de 200 elementos.
+    
+"""
 def ej6():
-    return None
+    Costos  = np.loadtxt("./Datos_Laboratorio_7/costos.dat", dtype = "float")
+    Stock   = np.loadtxt("./Datos_Laboratorio_7/stock.dat", dtype = "float")
+    Demanda = np.loadtxt("./Datos_Laboratorio_7/demanda.dat", dtype = "float")
+    # Dimensión (10000,)
+    c = Costos.flatten()
+    # Dimensión (200,)
+    b_ub = np.hstack((Stock, -Demanda))
+    # Dimensión (200, 10000)
+    A_ub = np.vstack(
+        ( np.kron(np.eye(100), np.ones(100)), np.kron(np.ones(100), -np.eye(100)) )
+    )
+    # Dimensión (10000,)
+    bounds = 10000 * [(0, None)]
+
+    res = optimize.linprog(
+        c = c,
+        A_ub = A_ub,
+        b_ub = b_ub,
+        bounds = bounds,
+        method = "interior-point"
+    )
+
+    print("Éxito: {}\n".format(res.success))
+    print("Iteraciones: {}\n".format(res.nit))
+    print(res.message + "\n")
+    if res.success:
+        print("Solución:\n")
+        for i in range(100):
+            for j in range(100):
+                if round(res.x[100 * i + j]) > 0:
+                    print("Del depósito {} se transporta al cliente {} aprox. {} unidades".format(
+                        i + 1,
+                        j + 1,
+                        round(res.x[100 * i + j])
+                    ))
+        print("\n")
+        print("Valor de la función objetivo: {}\n".format(res.fun))
