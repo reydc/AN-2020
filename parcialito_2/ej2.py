@@ -61,18 +61,19 @@ def gseidel(A, b, err, mit):
 
     """
     n, _ = A.shape
-    if b.shape == (n,1):
-        b = b.reshape(n)
+    bb = b.copy()
+    if bb.shape == (n,1):
+        bb = bb.reshape(n)
 
     k = 0
-    x   = np.zeros(n)
+    x = np.zeros(n)
     
     A_LD = np.tril(A)
     A_U  = np.triu(A, 1)
 
     while k < mit:
 
-        x_it = soltrinf(A_LD, b - (A_U @ x))
+        x_it = soltrinf(A_LD, bb - (A_U @ x))
         """ Ver si se acerca o no """
         norm = np.linalg.norm(x_it - x, np.inf)
         if norm <= err:
@@ -122,8 +123,9 @@ def sor(A, b, omega, err, mit):
         return None
     
     n, _ = A.shape
-    if b.shape == (n,1):
-        b = b.reshape(n)
+    bb = b.copy()
+    if bb.shape == (n,1):
+        bb = bb.reshape(n)
     
     k = 0
     x = np.zeros(n)
@@ -137,11 +139,11 @@ def sor(A, b, omega, err, mit):
 
     while k < mit:
 
-        x_it = soltrinf(Left , omega * b - (Right @ x))
+        x_it = soltrinf(Left , omega * bb - (Right @ x))
         """ Ver si se acerca o no """
         norm = np.linalg.norm(x_it - x, np.inf)
         if norm <= err:
-            print("[ gseidel ] || x_it - x ||(inf) == {} <= {}\n".format(norm, err))
+            print("[ sor ] || x_it - x ||(inf) == {} <= {}\n".format(norm, err))
             return [x_it, k]
         """ No se acerca, sigo iterando """
         x = x_it
