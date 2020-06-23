@@ -72,7 +72,7 @@ def trapecio(a, b, f_a, f_b):
     return (b - a) * (f_a + f_b) / 2
 
 
-def trapecio_adpatativo(x, y):
+def trapecio_adaptativo(x, y):
     """ trapecio_adaptativo:
 
         Versión modificada de la regla del trapecio para integrar en intervalos de 
