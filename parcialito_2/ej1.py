@@ -140,7 +140,7 @@ def posicion_particula(ts, vs):
     n = len(t)
     x   = []
     for i in range(1, n + 1):
-        x.append( trapecio_adpatativo(t[:i], v[:i]) )
+        x.append( trapecio_adaptativo(t[:i], v[:i]) )
     
     pyplot.plot(t, x, label = "Posiciones")
     pyplot.title("Ejercicio 1")
