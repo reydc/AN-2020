@@ -1,6 +1,6 @@
 # AN-2020
 
-Los ejercicios de los labs de Numérico I, aunque no están hechos de la mejor forma. Los labs consistieron en
+Los ejercicios de los labs de Numérico I de FaMAFyC/FaMAF, aunque no están hechos de la mejor forma. Los labs consistieron en
 
 1. Errores y cifras significativos, épsilon de la máquina, overflow y underflow  
 2. Aproximación de soluciones (o búsqueda de raíces)
